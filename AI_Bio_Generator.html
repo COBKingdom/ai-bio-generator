@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Bio Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f8fc;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    select, input, textarea, button {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    #output {
+      margin-top: 1.5rem;
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      min-height: 60px;
+    }
+    .limit {
+      font-size: 0.85rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Social Media Bio Generator</h1>
+
+    <label for="platform">Choose a platform:</label>
+    <select id="platform">
+      <option value="TikTok">TikTok (80 characters)</option>
+      <option value="Instagram">Instagram (150 characters)</option>
+      <option value="Facebook">Facebook (101 characters)</option>
+      <option value="Twitter">Twitter/X (160 characters)</option>
+      <option value="LinkedIn">LinkedIn (220 characters headline)</option>
+      <option value="YouTube">YouTube (1000 characters)</option>
+      <option value="Threads">Threads (500 characters)</option>
+      <option value="Snapchat">Snapchat (80 characters)</option>
+      <option value="Pinterest">Pinterest (160 characters)</option>
+      <option value="Reddit">Reddit (500 characters)</option>
+    </select>
+
+    <label for="name">Your Name or Brand:</label>
+    <input type="text" id="name" placeholder="e.g. Tolu the Tech Coach" />
+
+    <label for="focus">What do you do?</label>
+    <textarea id="focus" rows="2" placeholder="e.g. I teach people how to use AI for content creation."></textarea>
+
+    <label for="tone">Tone (e.g. fun, professional, bold):</label>
+    <input type="text" id="tone" placeholder="e.g. inspiring, friendly, witty" />
+
+    <label for="goal">What's your goal with this bio?</label>
+    <select id="goal">
+      <option value="followers">Gain more followers</option>
+      <option value="likes">Get more likes and shares</option>
+      <option value="credibility">Build brand credibility</option>
+      <option value="conversion">Convert visitors to clients</option>
+    </select>
+
+    <button onclick="generateBio()">Generate Bio</button>
+
+    <div id="output"></div>
+  </div>
+
+  <script>
+    const limits = {
+      TikTok: 80,
+      Instagram: 150,
+      Facebook: 101,
+      Twitter: 160,
+      LinkedIn: 220,
+      YouTube: 1000,
+      Threads: 500,
+      Snapchat: 80,
+      Pinterest: 160,
+      Reddit: 500
+    };
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function generateBio() {
+      const platform = document.getElementById("platform").value;
+      const name = document.getElementById("name").value.trim();
+      const focus = document.getElementById("focus").value.trim();
+      const tone = document.getElementById("tone").value.trim().toLowerCase();
+      const goal = document.getElementById("goal").value;
+      const maxLen = limits[platform];
+
+      let toneStyle = '';
+      if (tone.includes("fun") || tone.includes("witty")) {
+        toneStyle = "⚡ Making moves with style.";
+      } else if (tone.includes("professional") || tone.includes("bold")) {
+        toneStyle = "Strategy-driven. Impact-focused.";
+      } else if (tone.includes("inspiring")) {
+        toneStyle = "Empowering you daily.";
+      } else {
+        toneStyle = "Let’s build something epic.";
+      }
+
+      let goalPhrase = '';
+      switch(goal) {
+        case "followers":
+          goalPhrase = "Follow for smart moves.";
+          break;
+        case "likes":
+          goalPhrase = "Double-tap if this inspires you.";
+          break;
+        case "credibility":
+          goalPhrase = "Trusted by creators worldwide.";
+          break;
+        case "conversion":
+          goalPhrase = "DM me to get started.";
+          break;
+        default:
+          goalPhrase = "Let’s connect.";
+      }
+
+      const intro = `${name} | `;
+      const whatIDo = focus.length > 60 ? focus.slice(0, 60) + "..." : focus;
+      let bio = `${intro}${capitalize(whatIDo)} ${toneStyle} ${goalPhrase}`;
+
+      if (bio.length > maxLen) {
+        bio = bio.slice(0, maxLen - 1);
+        if (bio.endsWith(" ")) bio = bio.trim();
+      }
+
+      if (bio.length < maxLen * 0.9) {
+        const pad = ".";
+        while (bio.length + pad.length < maxLen) {
+          bio += pad;
+        }
+      }
+
+      document.getElementById("output").textContent = bio;
+    }
+  </script>
+</body>
+</html>
